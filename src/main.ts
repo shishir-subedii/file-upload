@@ -27,8 +27,8 @@ async function bootstrap() {
   // Global Error Handler
   app.useGlobalFilters(new GlobalExceptionFilter());
   const config = new DocumentBuilder()
-    .setTitle('Docs for JobGhar')
-    .setDescription('API documentation for JobGhar')
+    .setTitle('Docs for XYZ application')
+    .setDescription('API documentation for XYZ application')
     .setVersion('1.0')
     .addBearerAuth(
       {

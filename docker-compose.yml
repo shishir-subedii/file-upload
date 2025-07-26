@@ -1,18 +1,16 @@
-# this file is to run required containers for the project eg: sql server for development
 services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql-db
+  postgres:
+    image: postgres:15
+    container_name: pql-fileupload-container
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      POSTGRES_DB: pql-fileupload-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     ports:
-      - "3306:3306"
+      - '5432:5432'
     volumes:
-      - mysql_data:/var/lib/mysql
+      - pg-fileupload-v:/var/lib/postgresql/data
 
 volumes:
-  mysql_data:
+  pg-fileupload-v:
