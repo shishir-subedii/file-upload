@@ -83,7 +83,17 @@ export class AuthController {
   @Roles('user', 'admin')
   async logout(@Req() req: Request) {
     const user = req['user'] as { email: string };
-    await this.authService.logout(user.email);
+    const token = req.headers['authorization']?.split(' ')[1]; // Extract Bearer token
+
+    if (!token) {
+      return {
+        success: false,
+        message: 'Authorization token not found',
+      };
+    }
+
+    await this.authService.logout(user.email, token);
+
     return {
       success: true,
       message: 'User logged out successfully',

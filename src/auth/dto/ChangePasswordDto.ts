@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsString } from "class-validator";
 
 export class changePasswordDto {
-    @ApiProperty({ example: 'oldPassword123' })
+    @ApiProperty({ example: 'securePassword123' })
     @IsString()
     oldPassword: string;
 

@@ -1,5 +1,5 @@
 This is a template to make backend servers. 
-It includes dockercompose(for mysql), Typeorm and other necessary configurations like jwt, .env, bcrypt etc.
+It includes dockercompose(for postgresql), Typeorm and other necessary configurations like jwt, .env, bcrypt etc.
 It includes routes like signup, login, logout, etc..
 It is ready to use.
 
@@ -8,8 +8,8 @@ how to use:
 
 - install the necessary modules: npm install 
 
-- run mysql container : 
-    - docker compose -d up (or you can use any mysql environment)
+- run postgresql container : 
+    - docker compose -d up (or you can use any postgresql environment)
 
 - run the project(development): npm run start:dev
 

@@ -38,7 +38,7 @@ export class JwtAuthGuard implements CanActivate {
                     secret: process.env.Jwt_ACCESS_SECRET,
                 });
             const user = await this.userService.findCompleteProfileByEmail(payload.email);
-            if (!user || !user.accessToken) {
+            if (!user || !user.accessTokens || !user.accessTokens.includes(token)) {
                 throw new UnauthorizedException('User not logged-in');
             }
 

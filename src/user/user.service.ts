@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
@@ -24,7 +28,8 @@ export class UserService {
         const newUser = this.usersRepository.create({
             name: userData.name,
             email: userData.email,
-            password: hashedPassword
+            password: hashedPassword,
+            accessTokens: [], // initialize empty token list
         });
 
         return await this.usersRepository.save(newUser);
@@ -34,7 +39,7 @@ export class UserService {
         return this.usersRepository.find();
     }
 
-    async findOneById(id: number) {
+    async findOneById(id: string) {
         return this.usersRepository.findOne({ where: { id } });
     }
 
@@ -46,17 +51,34 @@ export class UserService {
         return this.usersRepository
             .createQueryBuilder('user')
             .addSelect('user.password')
-            .addSelect('user.accessToken')
+            .addSelect('user.accessTokens')
             .where('user.email = :email', { email })
             .getOne();
     }
-    
-    async setAccessToken(email: string, accessToken: string) {
-        await this.usersRepository.update({ email }, { accessToken });
+
+    // ✅ Add token to user's token array
+    async addAccessToken(email: string, newToken: string) {
+        const user = await this.findCompleteProfileByEmail(email);
+        if (!user) throw new BadRequestException('User not found');
+
+        user.accessTokens = [...(user.accessTokens || []), newToken];
+        await this.usersRepository.save(user);
     }
 
-    async removeAccessToken(email: string) {
-        await this.usersRepository.update({ email }, { accessToken: null });
+    // ✅ Remove a specific token (logout from one device)
+    async removeAccessToken(email: string, tokenToRemove: string) {
+        const user = await this.findCompleteProfileByEmail(email);
+        if (!user) throw new BadRequestException('User not found');
+
+        user.accessTokens = (user.accessTokens || []).filter(
+            token => token !== tokenToRemove,
+        );
+        await this.usersRepository.save(user);
+    }
+
+    // ✅ Optional: remove all tokens (logout from all devices)
+    async removeAllAccessTokens(email: string) {
+        await this.usersRepository.update({ email }, { accessTokens: [] });
     }
 
     async getUserProfile(email: string) {
@@ -74,17 +96,22 @@ export class UserService {
         }
 
         if (body.newPassword !== body.confirmNewPassword) {
-            throw new BadRequestException('New password and confirm password do not match');
+            throw new BadRequestException(
+                'New password and confirm password do not match',
+            );
         }
 
-        const isOldPasswordValid = await bcrypt.compare(body.oldPassword, user.password);
+        const isOldPasswordValid = await bcrypt.compare(
+            body.oldPassword,
+            user.password,
+        );
         if (!isOldPasswordValid) {
             throw new BadRequestException('Old password is incorrect');
         }
 
         const hashedPassword = await bcrypt.hash(body.newPassword, 10);
         user.password = hashedPassword;
-        user.accessToken = null;
+        user.accessTokens = []; // logout from all devices after password change
 
         try {
             return await this.usersRepository.save(user);
@@ -92,6 +119,4 @@ export class UserService {
             throw new InternalServerErrorException('Failed to change password');
         }
     }
-
 }
-

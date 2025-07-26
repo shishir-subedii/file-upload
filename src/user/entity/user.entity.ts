@@ -3,20 +3,21 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 @Entity('users')
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
+
     @Column({ unique: true })
     email: string;
 
     @Column()
     name: string;
 
-    @Column({select: false}) //we use select: false to avoid returning password in queries
+    @Column({ select: false }) //we use select: false to avoid returning password in queries
     password: string;
 
-    @Column({ nullable: true, default: null, type: 'text', select: false }) // Access token is nullable and not selected by default
-    accessToken: string | null;
+    @Column('text', { array: true, nullable: true, default: () => 'ARRAY[]::TEXT[]' })
+    accessTokens: string[];
+
 
     //find a better way to handle roles
     @Column({
@@ -25,7 +26,7 @@ export class User {
         default: 'user',
     })
     role: 'user' | 'admin';
-    
+
     @CreateDateColumn()
     createdAt: Date;
 
