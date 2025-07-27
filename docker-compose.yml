@@ -1,16 +1,16 @@
 services:
   postgres:
     image: postgres:15
-    container_name: pql-fileupload-container
+    container_name: pql-file-upload-container
     restart: always
     environment:
-      POSTGRES_DB: pql-fileupload-db
+      POSTGRES_DB: pql-file-upload-db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
       - '5432:5432'
     volumes:
-      - pg-fileupload-v:/var/lib/postgresql/data
+      - pg-file-upload-v:/var/lib/postgresql/data
 
 volumes:
-  pg-fileupload-v:
+  pg-file-upload-v: 
