@@ -1,10 +1,9 @@
 import { Body, Controller, Get, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiResponse, ApiBadRequestResponse, ApiBody, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiBadRequestResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { UserRegisterDto } from './dto/UserRegisterDto';
 import { UserLoginDto } from './dto/UserLoginDto';
 import { JwtAuthGuard } from 'src/common/auth/AuthGuard';
-import { Roles } from 'src/common/auth/AuthRoles';
 import { changePasswordDto } from './dto/ChangePasswordDto';
 
 @Controller('auth')
@@ -80,7 +79,6 @@ export class AuthController {
   })
   @Get('logout')
   @UseGuards(JwtAuthGuard)
-  @Roles('user', 'admin')
   async logout(@Req() req: Request) {
     const user = req['user'] as { email: string };
     const token = req.headers['authorization']?.split(' ')[1]; // Extract Bearer token
@@ -117,7 +115,6 @@ export class AuthController {
   })
   @Post('change-password')
   @UseGuards(JwtAuthGuard)
-  @Roles('user', 'admin')
   async changePassword(@Req() req: Request, @Body() body: changePasswordDto) {
     const user = req['user'] as {email: string};
     const updatedUser = await this.authService.changePassword(user.email, body);

@@ -14,15 +14,10 @@ import { UserService } from 'src/user/user.service';
 export class JwtAuthGuard implements CanActivate {
     constructor(
         private jwt: JwtService,
-        private readonly userService: UserService,
-        private reflector: Reflector,
+        private readonly userService: UserService
     ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const requiredRoles = this.reflector.get<string[]>(
-            'roles',
-            context.getHandler(),
-        );
 
         const req = context.switchToHttp().getRequest<Request>();
         const authHeader = req.headers.authorization;
@@ -33,19 +28,13 @@ export class JwtAuthGuard implements CanActivate {
 
         const token = authHeader.split(' ')[1];
         try {
-            const payload: { id: string; email: string; role: string } =
+            const payload: { id: string; email: string;} =
                 this.jwt.verify(token, {
                     secret: process.env.Jwt_ACCESS_SECRET,
                 });
             const user = await this.userService.findCompleteProfileByEmail(payload.email);
             if (!user || !user.accessTokens || !user.accessTokens.includes(token)) {
                 throw new UnauthorizedException('User not logged-in');
-            }
-
-            if (requiredRoles && !requiredRoles.includes(payload.role)) {
-                throw new ForbiddenException(
-                    'Forbidden: You are not authorized to access this route',
-                );
             }
             req['user'] = payload;
             return true;

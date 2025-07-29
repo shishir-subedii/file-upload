@@ -18,15 +18,6 @@ export class User {
     @Column('text', { array: true, nullable: true, default: () => 'ARRAY[]::TEXT[]' })
     accessTokens: string[];
 
-
-    //find a better way to handle roles
-    @Column({
-        type: 'enum',
-        enum: ['user', 'admin'],
-        default: 'user',
-    })
-    role: 'user' | 'admin';
-
     @CreateDateColumn()
     createdAt: Date;
 

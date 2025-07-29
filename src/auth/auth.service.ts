@@ -40,16 +40,14 @@ export class AuthService {
 
         const { accessToken } = await this.genTokens(
             user.id.toString(),
-            user.email,
-            user.role,
+            user.email
         );
 
         // ✅ Add the generated token to accessTokens list
         await this.userService.addAccessToken(user.email, accessToken);
 
         return {
-            accessToken,
-            role: user.role,
+            accessToken
         };
     }
 
@@ -58,9 +56,9 @@ export class AuthService {
         await this.userService.removeAccessToken(email, token);
     }
 
-    async genTokens(id: string, email: string, role: string) {
+    async genTokens(id: string, email: string) {
         const accessToken = this.jwt.sign(
-            { id, email, role },
+            { id, email },
             {
                 secret: process.env.JWT_ACCESS_SECRET,
                 expiresIn: process.env.JWT_ACCESS_EXPIRE,
