@@ -30,7 +30,7 @@ export class JwtAuthGuard implements CanActivate {
         try {
             const payload: { id: string; email: string;} =
                 this.jwt.verify(token, {
-                    secret: process.env.Jwt_ACCESS_SECRET,
+                    secret: process.env.JWT_ACCESS_SECRET,
                 });
             const user = await this.userService.findCompleteProfileByEmail(payload.email);
             if (!user || !user.accessTokens || !user.accessTokens.includes(token)) {
