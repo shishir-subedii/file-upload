@@ -22,7 +22,6 @@ export class ProjectController {
   async create(@Body() createProjectDto: CreateProjectDto, @Req() req: Request) {
     const data = await this.projectService.create(createProjectDto, req['user'] as userPayloadType);
     return{
-      success: true,
       message: 'Project created successfully',
       data: data,
     }
@@ -33,7 +32,6 @@ export class ProjectController {
   async findAll(@Req() req: Request) {
     const data = await this.projectService.findAll(req['user'] as userPayloadType);
     return {
-      success: true,
       message: 'Projects retrieved successfully',
       data: data,
     };
@@ -49,7 +47,6 @@ export class ProjectController {
   async findOne(@Param('slug') slug: string, @Req() req: Request) {
     const data = await this.projectService.findOne(slug, req['user'] as userPayloadType);
     return {
-      success: true,
       message: 'Project retrieved successfully',
       data: data,
     };
@@ -69,7 +66,6 @@ export class ProjectController {
   async update(@Param('slug') slug: string, @Body() updateProjectDto: UpdateProjectDto, @Req() req: Request) {
     const data = await this.projectService.update(slug, req['user'] as userPayloadType, updateProjectDto);
     return {
-      success: true,
       message: 'Project updated successfully',
       data: data,
     };
@@ -85,7 +81,6 @@ export class ProjectController {
   async remove(@Param('slug') slug: string, @Req() req: Request) {
     await this.projectService.remove(slug, req['user'] as userPayloadType);
     return {
-      success: true,
       message: 'Project removed successfully',
     };
   }
