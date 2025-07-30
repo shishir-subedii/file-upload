@@ -53,4 +53,8 @@ export class ProjectService {
     }
     return this.projectRepository.remove(project);
   }
+
+  async findByApiKey(apiKey: string) {
+    return this.projectRepository.findOne({ where: { apiKey } });
+  }
 }
