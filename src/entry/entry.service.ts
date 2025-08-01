@@ -9,6 +9,7 @@ import { Entry } from './entities/entry.entity';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { Project } from 'src/project/entities/project.entity';
 import { ProjectService } from 'src/project/project.service';
+import { AddEntry } from 'src/public-api/dto/addEntry.dto';
 
 @Injectable()
 export class EntryService {
@@ -97,7 +98,7 @@ export class EntryService {
     });
   }
 
-  async addByApiKey(apiKey: string, dto: CreateEntryDto, imgUrl: string) {
+  async addByApiKey(apiKey: string, dto: AddEntry, imgUrl: string) {
     const project = await this.projectService.findByApiKey(apiKey);
     if (!project) throw new NotFoundException('Project not found');
 
@@ -122,7 +123,7 @@ export class EntryService {
     await this.entryRepo.remove(entry);
   }
 
-  async updateByApiKey(apiKey: string, entryId: string, dto: CreateEntryDto) {
+  async updateByApiKey(apiKey: string, entryId: string, dto: AddEntry) {
     const entry = await this.entryRepo.findOne({
       where: { id: entryId, apiKey }
     });

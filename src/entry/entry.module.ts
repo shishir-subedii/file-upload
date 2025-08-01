@@ -16,5 +16,6 @@ import { UsersModule } from 'src/user/user.module';
   ],
   controllers: [EntryController],
   providers: [EntryService],
+  exports: [EntryService, TypeOrmModule.forFeature([Entry, Project])]
 })
 export class EntryModule {}
