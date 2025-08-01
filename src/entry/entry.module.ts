@@ -10,6 +10,7 @@ import { UsersModule } from 'src/user/user.module';
 @Module({
   imports: [
     UsersModule,
+    ProjectModule,
     TypeOrmModule.forFeature([Entry, Project]),
     ProjectModule
   ],
