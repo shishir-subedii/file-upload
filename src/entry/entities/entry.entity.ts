@@ -12,6 +12,9 @@ export class Entry {
     @Column({ type: 'text' })
     imgUrl: string;
 
+    @Column({ type: 'text' })
+    apiKey: string;
+
     // @Column({ type: 'text' })
     // project: string;
 

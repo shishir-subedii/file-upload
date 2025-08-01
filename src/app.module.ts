@@ -8,10 +8,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtmoduleModule } from './common/jwtmodule/jwtmodule.module';
 import { ProjectModule } from './project/project.module';
 import { EntryModule } from './entry/entry.module';
+import { PublicApiModule } from './public-api/public-api.module';
 
 @Module({
   imports: [
-    DatabaseModule, UsersModule, AuthModule, AppConfigModule, JwtmoduleModule, ProjectModule, EntryModule
+    DatabaseModule, UsersModule, AuthModule, AppConfigModule, JwtmoduleModule, ProjectModule, EntryModule, PublicApiModule
   ],
   providers: [],
 })
