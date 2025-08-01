@@ -25,6 +25,7 @@ export class PublicApiController {
     constructor(private readonly entryService: EntryService) { }
 
     @Get(':apiKey/entries')
+    @ApiOperation({ summary: 'Get all entries by API key' })
     @ApiParam({ name: 'apiKey', required: true })
     async getEntries(@Param('apiKey') apiKey: string) {
         const entries = await this.entryService.findEntriesByApikey(apiKey);
@@ -38,6 +39,7 @@ export class PublicApiController {
     }
 
     @Get(':apiKey/entry')
+    @ApiOperation({ summary: 'Get a single entry by API key' })
     @ApiParam({ name: 'apiKey', required: true })
     async getSingleEntry(@Param('apiKey') apiKey: string) {
         const entry = await this.entryService.findOneByApiKey(apiKey);
@@ -98,6 +100,7 @@ export class PublicApiController {
     }
 
     @Put(':apiKey/entries/:entryId')
+    @ApiOperation({ summary: 'Update an entry by API key' })
     @ApiParam({ name: 'apiKey', required: true })
     @ApiParam({ name: 'entryId', required: true })
     @ApiBody({ type: AddEntry })
@@ -114,6 +117,7 @@ export class PublicApiController {
     }
 
     @Delete(':apiKey/entries/:entryId')
+    @ApiOperation({ summary: 'Delete an entry by API key' })
     @ApiParam({ name: 'apiKey', required: true })
     @ApiParam({ name: 'entryId', required: true })
     async deleteEntry(
